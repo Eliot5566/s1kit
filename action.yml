@@ -1,0 +1,65 @@
+name: s1kit test
+description: Run an s1kit suite against your System One decision models and fail the job when accuracy drops.
+author: Eliot5566
+branding:
+  icon: check-circle
+  color: purple
+
+inputs:
+  suite:
+    description: Suite YAML file.
+    default: s1kit.yaml
+  fail-under:
+    description: Fail the job when overall accuracy is below this, e.g. 0.9. Leave empty to only report.
+    default: ""
+  only:
+    description: Run only these providers, separated by spaces.
+    default: ""
+  concurrency:
+    description: Requests in flight at once.
+    default: "1"
+  results:
+    description: Where to save every decision (JSONL).
+    default: results.jsonl
+  python-version:
+    description: Python to set up. Leave empty to use the one already on the runner.
+    default: "3.12"
+
+outputs:
+  results:
+    description: Path of the JSONL file with every decision.
+    value: ${{ inputs.results }}
+
+runs:
+  using: composite
+  steps:
+    - if: inputs.python-version != ''
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install s1kit
+      shell: bash
+      run: python -m pip install --quiet "$GITHUB_ACTION_PATH"
+    - name: Run suite
+      shell: bash
+      env:
+        SUITE: ${{ inputs.suite }}
+        FAIL_UNDER: ${{ inputs.fail-under }}
+        ONLY: ${{ inputs.only }}
+        CONCURRENCY: ${{ inputs.concurrency }}
+        RESULTS: ${{ inputs.results }}
+      run: |
+        args=("$SUITE" --out "$RESULTS" --concurrency "$CONCURRENCY")
+        [ -n "$FAIL_UNDER" ] && args+=(--fail-under "$FAIL_UNDER")
+        for name in $ONLY; do args+=(--only "$name"); done
+        set +e
+        s1kit test "${args[@]}" | tee "$RUNNER_TEMP/s1kit.txt"
+        status=${PIPESTATUS[0]}
+        set -e
+        {
+          echo "### s1kit: \`$SUITE\`"
+          echo '```text'
+          cat "$RUNNER_TEMP/s1kit.txt"
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+        exit "$status"

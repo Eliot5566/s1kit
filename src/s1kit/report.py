@@ -36,3 +36,18 @@ def render(rows):
             f"{r['errors']:>6} {r['p50_ms']:>8.1f} {r['p95_ms']:>8.1f}"
         )
     return "\n".join(lines)
+
+
+def overall(records):
+    """One line per provider, most accurate first: the headline of a comparison."""
+    totals = defaultdict(lambda: [0, 0, 0])
+    for r in records:
+        t = totals[r.provider]
+        t[0] += r.correct
+        t[1] += 1
+        t[2] += r.error is not None
+    ranked = sorted(totals.items(), key=lambda kv: (-kv[1][0] / kv[1][1], kv[0]))
+    return "\n".join(
+        f"{provider}: {correct}/{n} correct ({correct / n:.1%})" + (f", {errors} errors" if errors else "")
+        for provider, (correct, n, errors) in ranked
+    )

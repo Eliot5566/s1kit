@@ -16,7 +16,28 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[dev]"
       - run: pytest -q
-      - name: Example suite runs offline
+      - name: Quickstart works in an empty folder
         run: |
-          s1kit test examples/support-tickets.yaml --out /tmp/results.jsonl
-          s1kit calibrate /tmp/results.jsonl --target 0.95 --out /tmp/thresholds.yaml
+          cd "$(mktemp -d)"
+          s1kit init
+          s1kit test
+          s1kit calibrate results.jsonl --target 0.95
+
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the action on the example suite
+        uses: ./
+        with:
+          suite: examples/support-tickets.yaml
+          fail-under: "0.7"
+      - name: The action fails the job below the bar
+        id: strict
+        continue-on-error: true
+        uses: ./
+        with:
+          suite: examples/support-tickets.yaml
+          fail-under: "0.9"
+      - if: steps.strict.outcome != 'failure'
+        run: echo "expected --fail-under 0.9 to fail" && exit 1
