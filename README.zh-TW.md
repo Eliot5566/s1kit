@@ -13,11 +13,11 @@ Jev、Laya、kev，以及 llama.cpp、Ollama 上的決策模型，都使用同�
 真正的模型至少要贏過它。
 
 ```bash
-pip install -e ".[dev]"
+pip install s1kit
 s1kit test examples/support-tickets.yaml
 s1kit calibrate results.jsonl --target 0.95
 ```
 
 測試案例格式、Router 用法與指令說明請見[英文 README](README.md)。
 
-> 狀態：早期開發中（0.1.0.dev0），API 可能變動。
+> 狀態：alpha（0.1.0），1.0 之前 API 可能變動。

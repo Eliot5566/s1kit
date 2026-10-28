@@ -32,13 +32,15 @@ questions to a stronger model.
 The example runs offline: `keyword` is a built-in word-overlap baseline that needs no
 API key. Uncomment a real model in the suite to see how far it beats the baseline.
 
-> Status: early development (0.1.0.dev0). The API may change.
+> Status: alpha (0.1.0). The API may change before 1.0.
 
 ## Install
 
 ```bash
-pip install -e ".[dev]"   # from a clone; PyPI release coming with 0.1.0
+pip install s1kit
 ```
+
+To work on s1kit itself, clone the repo and run `pip install -e ".[dev]"`.
 
 ## Write a suite
 
