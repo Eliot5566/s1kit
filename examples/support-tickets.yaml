@@ -1,0 +1,55 @@
+# Route customer support tickets. Runs offline with the keyword baseline;
+# uncomment a real model to compare it against the baseline.
+providers:
+  - type: keyword
+  # - name: laya
+  #   base_url: http://localhost:8080      # laya-serve
+  #   model: laya
+  # - name: ollama
+  #   base_url: http://localhost:11434
+  #   model: kev-4b
+  # - name: jev
+  #   base_url: https://api.typesafe.ai
+  #   model: jev-latest
+  #   api_key_env: TYPESAFE_API_KEY
+
+questions:
+  team:
+    type: choice
+    instructions: Which team should handle this ticket?
+    criteria:
+      returns: Exchanges, refunds, wrong or damaged items, sending an order back
+      billing: Charges, invoices, payment methods, charged twice, card declined
+      tech: Login problems, password reset, bugs, errors, the app crashes
+  mood:
+    type: score
+    instructions: How upset is the customer?
+    criteria:
+      - Calm, polite, simple question
+      - Frustrated, annoyed, disappointed
+      - Very angry, furious, unacceptable, threatening to leave
+  urgent:
+    type: noul
+    instructions: Is this urgent, blocking, or about money taken right now?
+
+cases:
+  - state: "Hi, I'd like to send back the shoes I ordered, they are the wrong size."
+    expect: {team: returns, mood: 0, urgent: false}
+  - state: "I was charged twice for the same order. Please refund the extra payment right now."
+    expect: {team: billing, mood: 1, urgent: true}
+  - state: "The app crashes every time I open my orders page."
+    expect: {team: tech, mood: 1}
+  - state: "Password reset email never arrives, I can't login and I'm blocked."
+    expect: {team: tech, urgent: true}
+  - state: "This is unacceptable. My package arrived damaged and nobody answers. I'm furious."
+    expect: {team: returns, mood: 2}
+  - state: "Can I pay my invoice with a different card?"
+    expect: {team: billing, mood: 0, urgent: false}
+  - state: "My card was declined but the money was taken from my account."
+    expect: {team: billing, urgent: true}
+  - state: "Got a damaged mug, could I get an exchange?"
+    expect: {team: returns, mood: 0}
+  - state: "Error 500 when I try to checkout. Annoyed, this is the third time."
+    expect: {team: tech, mood: 1}
+  - state: "Where is my refund? It's been a month. I'm done with this store, cancelling everything."
+    expect: {team: returns, mood: 2}
