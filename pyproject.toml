@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "s1kit"
+dynamic = ["version"]
+description = "Test, calibrate and route System One decision models (Jev, Laya, kev, llama.cpp, Ollama) on your own data."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [{ name = "Eliot5566" }]
+keywords = ["system-one", "decision-models", "jev", "laya", "calibration", "evaluation", "llm-routing"]
+dependencies = ["PyYAML>=6"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+s1kit = "s1kit.cli:main"
+
+[tool.hatch.version]
+path = "src/s1kit/__init__.py"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
