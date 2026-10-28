@@ -7,6 +7,7 @@ Thanks for helping! Most contributions fit in one evening.
 - **Provider recipes**: a tested suite snippet for a server we don't document yet.
 - **Integrations**: LangChain, LlamaIndex, n8n, Vercel AI SDK.
 - **Report formats**: Markdown, JUnit XML, HTML.
+- **The GitHub Action** (`action.yml`): new inputs, nicer job summaries.
 - **Datasets**: an example suite for a real task (moderation, intent routing, triage).
 - **Translations** of the README.
 

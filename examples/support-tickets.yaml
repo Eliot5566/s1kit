@@ -1,17 +1,20 @@
-# Route customer support tickets. Runs offline with the keyword baseline;
-# uncomment a real model to compare it against the baseline.
+# Route customer support tickets. Runs offline with the keyword baseline:
+#   s1kit test
+# To compare a real model, uncomment it below and start its server, e.g.
+#   pip install "laya[serve]" && laya-serve
 providers:
   - type: keyword
   # - name: laya
-  #   base_url: http://localhost:8080      # laya-serve
+  #   base_url: http://localhost:8000      # laya-serve
   #   model: laya
+  #   timeout: 120                         # first request loads the model
   # - name: ollama
   #   base_url: http://localhost:11434
   #   model: kev-4b
   # - name: jev
   #   base_url: https://api.typesafe.ai
   #   model: jev-latest
-  #   api_key_env: TYPESAFE_API_KEY
+  #   api_key_env: TYPESAFE_API_KEY        # read from the environment, never stored here
 
 questions:
   team:
