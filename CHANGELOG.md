@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.1 — 2026-11-13
 
 - Preserve calibrated thresholds without rounding, so Router accepts the
   same confidence boundary that established calibration precision and coverage.

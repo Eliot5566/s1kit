@@ -1,6 +1,6 @@
 """Test, calibrate and route System One decision models (any /v1/systemone endpoint)."""
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 from .router import Router, RouterResult  # noqa: E402
 

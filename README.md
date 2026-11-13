@@ -59,7 +59,7 @@ suite separate, freeze the thresholds, then evaluate on the holdout before
 using them in production. Calibration coverage excludes errored records;
 check the error count as well as the accepted-answer precision.
 
-The source on main preserves the full precision of execution thresholds.
+Version 0.2.1 preserves the full precision of execution thresholds.
 Do not round values in `thresholds.yaml`: a rounded boundary can accept a
 different set of answers from the one used to measure precision and coverage.
 Releases up to 0.2.0 predate this fix.
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: Eliot5566/s1kit@v0.2.0
+      - uses: Eliot5566/s1kit@v0.2.1
         with:
           suite: s1kit.yaml
           fail-under: "0.9"     # fail the job below 90% accuracy
@@ -156,7 +156,7 @@ laya-serve 0.4 (including its strict Jev mode and `x_jev_confidence`). It has no
 yet been run against every hosted model; if a server's answers do not parse,
 please [open an issue](https://github.com/Eliot5566/s1kit/issues) with a sample response.
 
-> Status: alpha (0.2.0). The API may change before 1.0.
+> Status: alpha (0.2.1). The API may change before 1.0.
 
 ## Roadmap
 
