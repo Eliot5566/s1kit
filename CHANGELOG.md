@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Preserve calibrated thresholds without rounding, so Router accepts the
+  same confidence boundary that established calibration precision and coverage.
+- Add boundary regression tests, including a YAML round trip into Router.
+- Document holdout evaluation and the treatment of errored calibration cases.
+
 ## 0.2.0
 
 Easier to start, safer to run against real servers, and ready for CI.

@@ -53,6 +53,17 @@ keyword/urgent: confidence >= 0.7143 -> 100.0% precise, answers 40% of cases
 Read it as: trust the baseline on `team`, but send three quarters of `mood`
 questions to a stronger model.
 
+These percentages are fitted on the supplied calibration cases, not an
+independent test or a guarantee of future precision. Keep a labelled holdout
+suite separate, freeze the thresholds, then evaluate on the holdout before
+using them in production. Calibration coverage excludes errored records;
+check the error count as well as the accepted-answer precision.
+
+The source on main preserves the full precision of execution thresholds.
+Do not round values in `thresholds.yaml`: a rounded boundary can accept a
+different set of answers from the one used to measure precision and coverage.
+Releases up to 0.2.0 predate this fix.
+
 ## Write a suite
 
 ```yaml
