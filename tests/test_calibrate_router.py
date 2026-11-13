@@ -37,6 +37,26 @@ def test_calibrate_groups_by_provider_and_question():
     assert result["providers"]["b"]["q1"] is None
 
 
+@pytest.mark.parametrize("confidence", [0.80004, 0.80006])
+def test_threshold_preserves_the_acceptance_boundary(confidence):
+    records = [rec(confidence, True), rec(0.8, False)]
+    cut = threshold_for(records, 0.9)
+    accepted = [r for r in records if r.confidence >= cut["threshold"]]
+    assert len(accepted) == 1
+    assert sum(r.correct for r in accepted) / len(accepted) >= 0.9
+    assert len(accepted) / len(records) == cut["coverage"]
+
+
+def test_calibrated_threshold_survives_yaml_and_routes_boundary_cases():
+    import yaml
+
+    records = [rec(0.80004, True, "cheap"), rec(0.8, False, "cheap")]
+    thresholds = yaml.safe_load(yaml.safe_dump(calibrate(records, 0.9)))
+    for confidence, expected_provider in [(0.8, "big"), (0.80004, "cheap")]:
+        result = Router([Fake("cheap", confidence), Fake("big", 0.99)], thresholds).decide("s", {"q": CHOICE})
+        assert result.provider == expected_provider
+
+
 class Fake:
     def __init__(self, name, confidence=None, fail=False):
         self.name, self.confidence, self.fail, self.calls = name, confidence, fail, 0

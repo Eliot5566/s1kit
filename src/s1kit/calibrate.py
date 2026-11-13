@@ -18,7 +18,10 @@ def threshold_for(records, target):
         precision = correct / i
         if precision >= target:
             best = {
-                "threshold": round(confidence, 4),
+                # The router uses this value as a boundary, not for display.
+                # Rounding can admit a lower-confidence error or reject the
+                # very answer that established the measured precision.
+                "threshold": confidence,
                 "precision": round(precision, 4),
                 "coverage": round(i / len(scored), 4),
                 "n": len(scored),
